@@ -76,3 +76,13 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
+  
+  reports:
+    needs: [lint, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Something went wrong in pipelin
+        run: |
+          echo "pipeline failed"
+          echo "${{ toJson(github) }}"
