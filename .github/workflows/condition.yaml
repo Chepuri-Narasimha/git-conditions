@@ -81,17 +81,17 @@ jobs:
           path: dist
   deploy:
     needs: build
+    uses: ./.github/workflows/resusable.yml
+    with:
+        artifacts: dist-files
+ #   secrets:
+ #       my-secret: ${{ secrets.something }}
+  printing:
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Get build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: dist-files
-      - name: Output contents
-        run: ls
-      - name: Deploy
-        run: echo "Deploying..."
-  
+        - name: printing oupputs
+          run: echo "{{ needs.deploy.ouputs.final-results }}"
   reports:
     needs: [lint, deploy]
     if: failure()

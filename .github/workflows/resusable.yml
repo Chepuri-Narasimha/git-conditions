@@ -1,0 +1,31 @@
+name: Reuse code
+
+on: 
+  workflow_call:
+    inputs:
+      artifacts:
+        description: getting artifcats name
+        required: false
+        default: dist
+        type: string
+    outputs:
+      final-results:
+        description: getting outputs
+        value: $ {{ jobs.results.outputs.outcome }}
+#    secrets:
+#        my-secret:
+#          required: true
+
+jobs:
+    results:
+        outputs:
+            outcome: ${{ steps.results-output.outputs.step-result  }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: get code
+              id: results-output
+              uses: actions/download-artifact@v4
+              with:
+                name: ${{ inputs.artifacts }}
+            - name: results
+              run: echo "step-result=success" >> GITHUB_OUTPUT
